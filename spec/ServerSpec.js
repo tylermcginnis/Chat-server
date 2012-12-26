@@ -44,8 +44,9 @@ function StubResponse() {
 }
 
 describe("Node Server Request Listener Function", function() {
- it("Should respond to get requests for /log", function() {
-   var req = new StubRequest("http://127.0.0.1:8080/log", "GET");
+ it("Should answer GET requests for /classes/room", function() {
+   var req = new StubRequest("http://127.0.0.1:8080/classes/room1",
+                             "GET");
    var res = new StubResponse();
 
    handler.handleRequest(req, res);
@@ -55,8 +56,9 @@ describe("Node Server Request Listener Function", function() {
    expect(res.ended).toEqual(true);
  });
 
- it("Should accept posts to /send", function() {
-   var req = new StubRequest("http://127.0.0.1:8080/send", "POST",
+ it("Should accept posts to /classes/room", function() {
+   var req = new StubRequest("http://127.0.0.1:8080/classes/room1",
+                             "POST",
                             {username: "Jono",
                              message: "Do my bidding!"});
    var res = new StubResponse();
@@ -67,9 +69,10 @@ describe("Node Server Request Listener Function", function() {
    expect(res.data).toEqual("\n");
    expect(res.ended).toEqual(true);
 
-   // Now if we request the log, that message we posted should
-   // be there:
-   var req = new StubRequest("http://127.0.0.1:8080/log", "GET");
+   // Now if we request the log for that room,
+   // the message we posted should be there:
+   var req = new StubRequest("http://127.0.0.1:8080/classes/room1",
+                             "GET");
    var res = new StubResponse();
 
    handler.handleRequest(req, res);

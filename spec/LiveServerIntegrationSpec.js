@@ -2,7 +2,7 @@ var request = require("request");
 
 describe("Live Node Chat Server", function() {
  it("Should respond to get requests for /log", function(done) {
-   request("http://127.0.0.1:8080/log",
+   request("http://127.0.0.1:8080/classes/room2",
            function(error, response, body) {
              expect(body).toEqual("[]");
              done();
@@ -11,7 +11,7 @@ describe("Live Node Chat Server", function() {
 
  it("Should accept posts to /send", function(done) {
    request({method: "POST",
-            uri: "http://127.0.0.1:8080/send",
+            uri: "http://127.0.0.1:8080/classes/room2",
             form: {username: "Jono",
                message: "Do my bidding!"}
             },
@@ -19,7 +19,7 @@ describe("Live Node Chat Server", function() {
              expect(response.statusCode).toEqual(302);
              // Now if we request the log, that message 
              // we posted should be there:
-             request("http://127.0.0.1:8080/log",
+             request("http://127.0.0.1:8080/classes/room2",
                      function(error, response, body) {
                        var messageLog = JSON.parse(body);
                        expect(messageLog[0].username).toEqual("Jono");
