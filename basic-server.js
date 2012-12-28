@@ -11,11 +11,16 @@ var requestListener = function (request, response) {
   console.log("Serving request type " + request.method
               + " for url " + request.url);
 
+  /* "Status code" and "headers" are HTTP concepts that you can 
+   * research on the web as and when it becomes necessary. */
+  var statusCode = 200;
+  var headers = {'Content-Type': "text/plain"};
+
   /* Response is an http.ServerRespone object containing methods for
    * writing our response to the client. Documentation for both request
    * and response can be found at 
    * http://nodemanual.org/0.8.14/nodejs_ref_guide/http.html*/
-  response.writeHead(200, {'Content-Type': "text/plain"});
+  response.writeHead(statusCode, headers);
   /* writeHead() tells our server what HTTP status code to send back
    * to the client, and what headers to include on the response. */
   response.end("Hello, World!");
