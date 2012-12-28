@@ -1,6 +1,17 @@
 /* Import node's http module: */
 var http = require("http");
 
+var defaultCorsHeaders = function(){
+  var headers = {
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "access-control-allow-headers": "content-type, accept",
+    "access-control-max-age": 10 // Seconds.
+  };
+
+  return headers;
+}
+
 /* This is the callback function that will be called each time a
  * client (i.e.. a web browser) makes a request to our server. */
 var requestListener = function (request, response) {
@@ -14,7 +25,8 @@ var requestListener = function (request, response) {
   /* "Status code" and "headers" are HTTP concepts that you can 
    * research on the web as and when it becomes necessary. */
   var statusCode = 200;
-  var headers = {'Content-Type': "text/plain"};
+  var headers = defaultCorsHeaders();
+  headers['Content-Type'] = "text/plain";
 
   /* Response is an http.ServerRespone object containing methods for
    * writing our response to the client. Documentation for both request
