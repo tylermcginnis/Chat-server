@@ -1,6 +1,11 @@
 /* Import node's http module: */
 var http = require("http");
+/* Import our custom Cross-Origin Resource Sharing (CORS) code: */
 var defaultCorsHeaders = require("./lib/cors.js").defaultCorsHeaders;
+/* This CRUCIAL code allows this server to talk to websites that
+ * are on different domains. (Your chat client is running from a url
+ * like file://your/chat/client/index.html, which is considered a
+ * different domain.) */
 
 /* This is the callback function that will be called each time a
  * client (i.e.. a web browser) makes a request to our server. */
@@ -15,6 +20,8 @@ var requestListener = function (request, response) {
   /* "Status code" and "headers" are HTTP concepts that you can 
    * research on the web as and when it becomes necessary. */
   var statusCode = 200;
+  /* Without this line, this server wouldn't work.  See the note at
+   * the top of this file. */
   var headers = defaultCorsHeaders();
   headers['Content-Type'] = "text/plain";
 
