@@ -5,5 +5,5 @@
  * node module documentation at http://nodejs.org/api/modules.html. */
 
 var handleRequest = function(request, response) {
-  
+
 };

@@ -1,18 +1,6 @@
 /* Import node's http module: */
 var http = require("http");
 
-/* These headers will allow Cross-Origin Resource Sharing.
- * This CRUCIAL code allows this server to talk to websites that
- * are on different domains. (Your chat client is running from a url
- * like file://your/chat/client/index.html, which is considered a
- * different domain.) */
-var defaultCorsheaders = {
-  "access-control-allow-origin": "*",
-  "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "access-control-allow-headers": "content-type, accept",
-  "access-control-max-age": 10 // Seconds.
-};
-
 /* This is the callback function that will be called each time a
  * client (i.e.. a web browser) makes a request to our server. */
 var requestListener = function (request, response) {
@@ -43,6 +31,18 @@ var requestListener = function (request, response) {
    * anything back to the client until you do. The string you pass to
    * response.end() will be the body of the response - i.e. what shows
    * up in the browser.*/
+};
+
+/* These headers will allow Cross-Origin Resource Sharing.
+ * This CRUCIAL code allows this server to talk to websites that
+ * are on different domains. (Your chat client is running from a url
+ * like file://your/chat/client/index.html, which is considered a
+ * different domain.) */
+var defaultCorsheaders = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "access-control-allow-headers": "content-type, accept",
+  "access-control-max-age": 10 // Seconds.
 };
 
 /* Every server needs to listen on a port with a unique number. The

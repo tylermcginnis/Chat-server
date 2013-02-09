@@ -35,12 +35,12 @@ function StubResponse() {
     console.log("WriteHead called with " + responseCode);
     self.responseCode = responseCode;
     self.headers = headers;
-  }
+  };
   this.end = function(data) {
     console.log("Response.end called.");
     self.ended = true;
     self.data = data;
-  }
+  };
 }
 
 describe("Node Server Request Listener Function", function() {
@@ -71,9 +71,9 @@ describe("Node Server Request Listener Function", function() {
 
    // Now if we request the log for that room,
    // the message we posted should be there:
-   var req = new StubRequest("http://127.0.0.1:8080/classes/room1",
+   req = new StubRequest("http://127.0.0.1:8080/classes/room1",
                              "GET");
-   var res = new StubResponse();
+   res = new StubResponse();
 
    handler.handleRequest(req, res);
 
