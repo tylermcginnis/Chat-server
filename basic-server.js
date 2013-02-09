@@ -1,11 +1,17 @@
 /* Import node's http module: */
 var http = require("http");
-/* Import our custom Cross-Origin Resource Sharing (CORS) code: */
-var defaultCorsHeaders = require("./lib/cors.js").defaultCorsHeaders;
-/* This CRUCIAL code allows this server to talk to websites that
+
+/* These headers will allow Cross-Origin Resource Sharing.
+ * This CRUCIAL code allows this server to talk to websites that
  * are on different domains. (Your chat client is running from a url
  * like file://your/chat/client/index.html, which is considered a
  * different domain.) */
+var defaultCorsheaders = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "access-control-allow-headers": "content-type, accept",
+  "access-control-max-age": 10 // Seconds.
+};
 
 /* This is the callback function that will be called each time a
  * client (i.e.. a web browser) makes a request to our server. */
@@ -17,7 +23,7 @@ var requestListener = function (request, response) {
   console.log("Serving request type " + request.method
               + " for url " + request.url);
 
-  /* "Status code" and "headers" are HTTP concepts that you can 
+  /* "Status code" and "headers" are HTTP concepts that you can
    * research on the web as and when it becomes necessary. */
   var statusCode = 200;
   /* Without this line, this server wouldn't work.  See the note at
@@ -27,7 +33,7 @@ var requestListener = function (request, response) {
 
   /* Response is an http.ServerRespone object containing methods for
    * writing our response to the client. Documentation for both request
-   * and response can be found at 
+   * and response can be found at
    * http://nodemanual.org/0.8.14/nodejs_ref_guide/http.html*/
   response.writeHead(statusCode, headers);
   /* writeHead() tells our server what HTTP status code to send back
