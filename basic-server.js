@@ -28,7 +28,7 @@ var requestListener = function (request, response) {
   var statusCode = 200;
   /* Without this line, this server wouldn't work.  See the note at
    * the top of this file. */
-  var headers = defaultCorsHeaders();
+  var headers = defaultCorsHeaders;
   headers['Content-Type'] = "text/plain";
 
   /* Response is an http.ServerRespone object containing methods for
