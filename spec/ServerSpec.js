@@ -26,20 +26,20 @@ function StubRequest(url, method, postdata) {
 }
 
 function StubResponse() {
-  this.ended = false;
-  this.responseCode = null;
-  this.headers = null;
-  this.data = null;
+  this._ended = false;
+  this._responseCode = null;
+  this._headers = null;
+  this._data = null;
   var self = this;
   this.writeHead = function(responseCode, headers) {
     console.log("WriteHead called with " + responseCode);
-    self.responseCode = responseCode;
-    self.headers = headers;
+    self._responseCode = responseCode;
+    self._headers = headers;
   };
   this.end = function(data) {
     console.log("Response.end called.");
-    self.ended = true;
-    self.data = data;
+    self._ended = true;
+    self._data = data;
   };
 }
 
@@ -51,9 +51,9 @@ describe("Node Server Request Listener Function", function() {
 
    handler.handleRequest(req, res);
 
-   expect(res.responseCode).toEqual(200);
-   expect(res.data).toEqual("[]");
-   expect(res.ended).toEqual(true);
+   expect(res._responseCode).toEqual(200);
+   expect(res._data).toEqual("[]");
+   expect(res._ended).toEqual(true);
  });
 
  it("Should accept posts to /classes/room", function() {
@@ -65,9 +65,9 @@ describe("Node Server Request Listener Function", function() {
 
    handler.handleRequest(req, res);
 
-   expect(res.responseCode).toEqual(302);
-   expect(res.data).toEqual("\n");
-   expect(res.ended).toEqual(true);
+   expect(res._responseCode).toEqual(302);
+   expect(res._data).toEqual("\n");
+   expect(res._ended).toEqual(true);
 
    // Now if we request the log for that room,
    // the message we posted should be there:
@@ -77,12 +77,12 @@ describe("Node Server Request Listener Function", function() {
 
    handler.handleRequest(req, res);
 
-   expect(res.responseCode).toEqual(200);
+   expect(res._responseCode).toEqual(200);
    var messageLog = JSON.parse(res.data);
    expect(messageLog.length).toEqual(1);
    expect(messageLog[0].username).toEqual("Jono");
    expect(messageLog[0].message).toEqual("Do my bidding!");
-   expect(res.ended).toEqual(true);
+   expect(res._ended).toEqual(true);
  });
 
 
@@ -98,8 +98,8 @@ describe("Node Server Request Listener Function", function() {
    waits(1000);
 
    runs(function() {
-     expect(res.responseCode).toEqual(404);
-     expect(res.ended).toEqual(true);
+     expect(res._responseCode).toEqual(404);
+     expect(res._ended).toEqual(true);
    });
  });
 
