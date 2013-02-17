@@ -8,7 +8,7 @@ function StubRequest(url, method, postdata) {
     //ignore
   };
   var self = this;
-  this.addListener = function(type, callback) {
+  this.addListener = this.on = function(type, callback) {
     if (type == "data") {
       // turn postdata (dictionary object) into raw postdata
       // raw postdata looks like this:
