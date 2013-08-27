@@ -3,7 +3,8 @@
  * basic-server.js.  So you must figure out how to export the function
  * from this file and include it in basic-server.js. Check out the
  * node module documentation at http://nodejs.org/api/modules.html. */
-var messages = [];
+var messages = {};
+var messageKey = 0;
 
 var handlePostRequest = function(request){
   var someData = '';
@@ -14,17 +15,24 @@ var handlePostRequest = function(request){
 
   request.on('end', function(){
     var parsedData = JSON.parse(someData);
+    var results = {};
     var messageObj = {};
     messageObj.username = parsedData.username;
     messageObj.text = parsedData.text;
     messageObj.roomname = parsedData.roomname;
     messageObj.createdAt = new Date();
-    messages.push(messageObj);
+    messageKey++;
+    messages[messageKey] = messageObj;
   });
 };
 
-var handleGetRequest = function(request){
-  
+var handleGetRequest = function(request, response){
+  request.on("error", function(){
+    console.log("There was an error. Frick");
+  });
+  var messageObject = {};
+  messageObject.results = messages;
+  response.write(JSON.stringify(messageObject));
 };
 
 exports.handlePostRequest = handlePostRequest;

@@ -20,8 +20,8 @@ var requestListener = function (request, response) {
     rh.handlePostRequest(request);
     response.end("Post added");
   } else if (request.method == 'GET'){
-    rh.handleGetRequest(request);
-    response.end("Get Request Successful");
+    rh.handleGetRequest(request, response);
+    response.end();
   }
 
   response.end('Default Response?');
