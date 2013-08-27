@@ -7,7 +7,7 @@ var rh = require('./request-handler');
  * client (i.e.. a web browser) makes a request to our server. */
 
 var requestListener = function (request, response) {
-  var reply;
+  // var reply;
   console.log("Serving request type " + request.method + " for url " + request.url);
   var statusCode = 200;
   var headers = defaultCorsHeaders;
@@ -16,15 +16,26 @@ var requestListener = function (request, response) {
 
   response.writeHead(statusCode, headers);
 
-  if(request.method == 'POST'){
-    rh.handlePostRequest(request);
-    response.end("Post added");
-  } else if (request.method == 'GET'){
-    rh.handleGetRequest(request, response);
-    response.end();
+  var urlPath = url.parse(request.url).pathname;
+  var splitPath = urlPath.split('/');
+  splitPath.shift();
+  console.log(urlPath);
+  console.log(splitPath);
+
+  if(request.method === 'POST'){
+    if(splitPath[0] === 'messages'){
+      console.log(splitPath[1]);
+      rh.handlePostMessage(request, splitPath[1]);
+      response.end("Post Message Handled");
+    }
+  } else if (request.method === 'GET'){
+    if(splitPath[0] === 'messages') {
+      rh.handleGetMessages(request, response, splitPath[1]);
+      response.end();
+    }
   }
 
-  response.end('Default Response?');
+  response.end('Bitch, what you think you doing?');
 };
 
 

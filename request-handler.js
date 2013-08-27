@@ -4,36 +4,42 @@
  * from this file and include it in basic-server.js. Check out the
  * node module documentation at http://nodejs.org/api/modules.html. */
 var messages = {};
+messages.general = {};
 var messageKey = 0;
 
-var handlePostRequest = function(request){
-  var someData = '';
+var handlePostMessage = function(request, roomName){
+  var messageData = '';
 
   request.on('data', function(data){
-     someData+=data;
+     messageData+=data;
   });
 
   request.on('end', function(){
-    var parsedData = JSON.parse(someData);
-    var results = {};
+    var parsedData = JSON.parse(messageData);
+    var roomObj = messages[roomName] || {};
+    var messageKey = Object.keys(roomObj).length;
     var messageObj = {};
     messageObj.username = parsedData.username;
     messageObj.text = parsedData.text;
-    messageObj.roomname = parsedData.roomname;
+    messageObj.roomname = roomName;
     messageObj.createdAt = new Date();
-    messageKey++;
-    messages[messageKey] = messageObj;
+    console.log("messageObj - ", messageObj);
+    roomObj[messageKey] = messageObj;
+    console.log("roomObj - ", roomObj);
+    messages[roomName] = roomObj;
+    console.log("messages - ", messages);
   });
 };
 
-var handleGetRequest = function(request, response){
+var handleGetMessages = function(request, response, roomName){
   request.on("error", function(){
     console.log("There was an error. Frick");
   });
   var messageObject = {};
-  messageObject.results = messages;
+  messageObject.results = messages[roomName];
+  console.log(messages);
   response.write(JSON.stringify(messageObject));
 };
 
-exports.handlePostRequest = handlePostRequest;
-exports.handleGetRequest = handleGetRequest;
+exports.handlePostMessage = handlePostMessage;
+exports.handleGetMessages = handleGetMessages;
