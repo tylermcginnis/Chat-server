@@ -19,8 +19,8 @@ var requestListener = function (request, response) {
   var urlPath = url.parse(request.url).pathname;
   var splitPath = urlPath.split('/');
   splitPath.shift();
-  console.log(urlPath);
-  console.log(splitPath);
+  // console.log(urlPath);
+  // console.log(splitPath);
 
   if(request.method === 'POST'){
     if(splitPath[0] === 'messages'){
@@ -32,9 +32,11 @@ var requestListener = function (request, response) {
     if(splitPath[0] === 'messages') {
       rh.handleGetMessages(request, response, splitPath[1]);
       response.end();
+    } else if(splitPath[0] === 'chatrooms'){
+      rh.handleGetChatrooms(request, response);
+      response.end();
     }
   }
-
   response.end('Bitch, what you think you doing?');
 };
 
@@ -53,6 +55,9 @@ var port = 8080;
 var ip = "127.0.0.1";
 
 var server = http.createServer(requestListener);
+server.on('connection', function(){
+  rh.firstConnection();
+});
 console.log("Listening on http://" + ip + ":" + port);
 server.listen(port, ip);
 
