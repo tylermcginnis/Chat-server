@@ -1,13 +1,47 @@
-/* You should implement your request handler function in this file.
- * But you need to pass the function to http.createServer() in
- * basic-server.js.  So you must figure out how to export the function
- * from this file and include it in basic-server.js. Check out the
- * node module documentation at http://nodejs.org/api/modules.html. */
 var fs = require('fs');
+var path = require('path');
 
 var messages = {};
 messages.general = {};
 var messageKey = 0;
+
+var handleStaticRequests = function(request, response) {
+  var filePath = './client' + request.url;
+
+  if (filePath == './client/') {
+    filePath = './client/index.html';
+  }
+
+  var extname = path.extname(filePath);
+  var contentType = 'text/html';
+  switch (extname) {
+    case '.js':
+    contentType = 'text/javascript';
+    break;
+    case '.css':
+    contentType = 'text/css';
+    break;
+  }
+
+  fs.exists(filePath, function(exists) {
+    if (exists) {
+      fs.readFile(filePath, function(error, content) {
+        if (error) {
+          response.writeHead(500);
+          response.end();
+        }
+        else {
+          response.writeHead(200, { 'Content-Type': contentType });
+          response.end(content, 'utf-8');
+        }
+      });
+    }
+    else {
+      response.writeHead(404);
+      response.end();
+    }
+  });
+};
 
 var handlePostMessage = function(request, roomName){
   var messageData = '';
@@ -33,12 +67,11 @@ var handlePostMessage = function(request, roomName){
 };
 
 var handleGetMessages = function(request, response, roomName){
-
   request.on("error", function(){
     console.log("There was an error. Frick");
   });
   var messageObject = {};
-  messageObject.results = messages[roomName];
+  messageObject.results = messages[roomName] || {};
   response.write(JSON.stringify(messageObject));
 };
 
@@ -65,7 +98,6 @@ var saveToFile = function() {
 
 var handleGetChatrooms = function(request, response){
   var keys = Object.keys(messages);
-  console.log("THE KEYS  _>   ", keys);
   response.write(JSON.stringify(keys));
 };
 
@@ -73,3 +105,4 @@ exports.handlePostMessage = handlePostMessage;
 exports.handleGetMessages = handleGetMessages;
 exports.firstConnection = firstConnection;
 exports.handleGetChatrooms = handleGetChatrooms;
+exports.handleStaticRequests = handleStaticRequests;
